@@ -1,0 +1,2 @@
+recursive-include tutorsurvey_plugin/patches *
+recursive-include tutorsurvey_plugin/templates *
