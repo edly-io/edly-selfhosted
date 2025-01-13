@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   Button,
   Container,
@@ -12,6 +12,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { StudioFooter } from '@edx/frontend-component-footer';
 import { getConfig } from '@edx/frontend-platform';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Widget } from '@typeform/embed-react';
 
 import Loading from '../generic/Loading';
 import InternetConnectionAlert from '../generic/internet-connection-alert';
@@ -25,11 +26,19 @@ import CreateNewCourseForm from './create-new-course-form';
 import messages from './messages';
 import { useStudioHome } from './hooks';
 import AlertMessage from '../generic/alert-message';
+import { getSurveyAPIData } from './data/api';
+
 
 const StudioHome = () => {
   const intl = useIntl();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [surveyData, setSurveyData] = useState({
+    lastLogin: false,
+    email: "",
+    username: "",
+  });
 
   const isPaginationCoursesEnabled = getConfig().ENABLE_HOME_PAGE_COURSE_API_V2;
   const {
@@ -49,8 +58,10 @@ const StudioHome = () => {
     librariesV2Enabled,
   } = useStudioHome();
 
+
   const v1LibraryTab = librariesV1Enabled && location?.pathname.split('/').pop() === 'libraries-v1';
   const showV2LibraryURL = librariesV2Enabled && !v1LibraryTab;
+
 
   const {
     userIsActive,
@@ -113,6 +124,19 @@ const StudioHome = () => {
     return headerButtons;
   }, [location, userIsActive, isFailedLoadingPage]);
 
+  useEffect(() => {
+    const fetchSurveyData = async () => {
+      try {
+        const data = await getSurveyAPIData();
+        setSurveyData(data);
+      } catch (error) {
+        console.error("Failed to fetch survey data:", error);
+      }
+    };
+  
+    fetchSurveyData();
+  }, []);
+
   const headerButtons = userIsActive ? getHeaderButtons() : [];
   if (isLoadingPage && !isFiltered) {
     return (<Loading />);
@@ -166,31 +190,40 @@ const StudioHome = () => {
     );
   };
 
-  return (
+  return surveyData?.lastLogin ? (
     <>
-      <Header isHiddenMainMenu />
-      <Container size="xl" className="p-4 mt-3">
-        <section className="mb-4">
-          <article className="studio-home-sub-header">
-            <section>
-              <SubHeader
-                title={intl.formatMessage(messages.headingTitle, { studioShortName: studioShortName || 'Studio' })}
-                headerActions={headerButtons}
-              />
-            </section>
-          </article>
-          {getMainBody()}
-        </section>
-      </Container>
-      <div className="alert-toast">
-        <InternetConnectionAlert
-          isFailed={anyQueryIsFailed}
-          isQueryPending={anyQueryIsPending}
-        />
-      </div>
-      <StudioFooter />
-    </>
-  );
+    <Header isHiddenMainMenu />
+    <Container size="xl" className="p-4 mt-3">
+      <section className="mb-4">
+        <article className="studio-home-sub-header">
+          <section>
+            <SubHeader
+              title={intl.formatMessage(messages.headingTitle, { studioShortName: studioShortName || 'Studio' })}
+              headerActions={headerButtons}
+            />
+          </section>
+        </article>
+        {getMainBody()}
+      </section>
+    </Container>
+    <div className="alert-toast">
+      <InternetConnectionAlert
+        isFailed={anyQueryIsFailed}
+        isQueryPending={anyQueryIsPending}
+      />
+    </div>
+    <StudioFooter />
+  </>
+  ) : (
+    <Widget
+    id="WHBX8vDV"
+    style={{ height: "100vh", width: "100%" }}
+    hidden={{
+      name: surveyData.username,
+      email: surveyData.email,
+    }}
+  />
+  )
 };
 
 export default StudioHome;

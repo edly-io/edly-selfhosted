@@ -59,3 +59,10 @@ export async function sendRequestForCourseCreator() {
   const { data } = await getAuthenticatedHttpClient().post(getRequestCourseCreatorUrl());
   return camelCaseObject(data);
 }
+
+export async function getSurveyAPIData() {
+  const { data } = await getAuthenticatedHttpClient().get(
+    `${getApiBaseUrl()}/api/survey-data`
+  );
+  return camelCaseObject(data);
+}
