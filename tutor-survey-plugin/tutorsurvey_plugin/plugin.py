@@ -11,10 +11,6 @@ from .__about__ import __version__
 # CONFIGURATION
 ########################################
 
-hooks.Filters.MOUNTED_DIRECTORIES.add_item((
-    "openedx", "survey_api"
-))
-
 hooks.Filters.CONFIG_DEFAULTS.add_items(
     [
         # Add your new settings that have default values here.
@@ -229,36 +225,3 @@ for path in glob(str(importlib_resources.files("tutorsurvey_plugin") / "patches"
 
 # This would allow you to run:
 #   $ tutor survey_plugin example-command
-
-from tutormfe.hooks import PLUGIN_SLOTS, MFE_APPS
-
-PLUGIN_SLOTS.add_items([
-    (
-        "all",
-        "footer_slot",
-        """
-        {
-            op: PLUGIN_OPERATIONS.Insert,
-            widget: {
-                id: 'custom_footer',
-                type: DIRECT_PLUGIN,
-                RenderWidget: () => <OnboardingSurvey />
-            }
-        }
-        """
-    )
-])
-
-@MFE_APPS.add()
-def _remove_some_my_mfe(mfes):
-    mfes.pop("authn")
-    # mfes.pop("learner-dashboard")
-    mfes.pop("authoring")
-    mfes.pop("profile")
-    mfes.pop("discussions")
-    mfes.pop("gradebook")
-    mfes.pop("account")
-    mfes.pop("communications")
-    mfes.pop("ora-grading")
-    
-    return mfes
