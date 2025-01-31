@@ -11,6 +11,10 @@ from .__about__ import __version__
 # CONFIGURATION
 ########################################
 
+hooks.Filters.MOUNTED_DIRECTORIES.add_item((
+    "openedx", "survey_api"
+))
+
 hooks.Filters.CONFIG_DEFAULTS.add_items(
     [
         # Add your new settings that have default values here.
@@ -225,3 +229,22 @@ for path in glob(str(importlib_resources.files("tutorsurvey_plugin") / "patches"
 
 # This would allow you to run:
 #   $ tutor survey_plugin example-command
+
+from tutormfe.hooks import PLUGIN_SLOTS
+
+PLUGIN_SLOTS.add_items([
+    (
+        "all",
+        "footer_slot",
+        """
+        {
+            op: PLUGIN_OPERATIONS.Insert,
+            widget: {
+                id: 'custom_footer',
+                type: DIRECT_PLUGIN,
+                RenderWidget: () => <OnboardingSurvey />
+            }
+        }
+        """
+    )
+])
