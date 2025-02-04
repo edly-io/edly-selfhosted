@@ -51,5 +51,5 @@ const OnboardingSurvey = () => {
 
   if (loading) return <></>;
 
-  return showForm ? <Popover id="{{ SURVEY_PLUGIN_FORM_ID }}" height="90vh" width="50vw" open="load" hidden={userData} onSubmit={handleOnSubmit} /> : <></>;
+  return showForm ? <Popover id="{{ EDLY_SELFHOSTED_FORM_ID }}" height="90vh" width="50vw" open="load" hidden={userData} onSubmit={handleOnSubmit} /> : <></>;
 }

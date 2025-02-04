@@ -14,7 +14,7 @@ def load_readme():
 def load_about():
     about = {}
     with io.open(
-        os.path.join(HERE, "tutorsurvey_plugin", "__about__.py"),
+        os.path.join(HERE, "tutoredlyselfhosted", "__about__.py"),
         "rt",
         encoding="utf-8",
     ) as f:
@@ -26,17 +26,17 @@ ABOUT = load_about()
 
 
 setup(
-    name="tutor-survey-plugin",
+    name="tutor-edly-selfhosted",
     version=ABOUT["__version__"],
-    url="https://github.com/edly-io/tutor-survey-plugin",
+    url="https://github.com/edly-io/tutor-edly-selfhosted",
     project_urls={
-        "Code": "https://github.com/edly-io/tutor-survey-plugin",
-        "Issue tracker": "https://github.com/edly-io/tutor-survey-plugin/issues",
+        "Code": "https://github.com/edly-io/tutor-edly-selfhosted",
+        "Issue tracker": "https://github.com/edly-io/tutor-edly-selfhosted/issues",
     },
     license="AGPLv3",
-    author="John Doe",
-    author_email="john.doe@example.com",
-    description="survey_plugin plugin for Tutor",
+    author="Edly",
+    author_email="hello@edly.io",
+    description="Tutor plugin for self-hosted Open edX platforms supported by Edly",
     long_description=load_readme(),
     long_description_content_type="text/x-rst",
     packages=find_packages(exclude=["tests*"]),
@@ -50,7 +50,7 @@ setup(
     },
     entry_points={
         "tutor.plugin.v1": [
-            "survey_plugin = tutorsurvey_plugin.plugin"
+            "edly-selfhosted = tutoredlyselfhosted.plugin"
         ]
     },
     classifiers=[

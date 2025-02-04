@@ -11,19 +11,24 @@ from .__about__ import __version__
 # CONFIGURATION
 ########################################
 
-hooks.Filters.CONFIG_DEFAULTS.add_item(
-    # Typeform ID
-    ("SURVEY_PLUGIN_FORM_ID", "WHBX8vDV")
+hooks.Filters.CONFIG_DEFAULTS.add_items(
+    [
+        # Typeform ID
+        ("EDLY_SELFHOSTED_FORM_ID", "WHBX8vDV"),
+        # Install edx-platform plugin from this GitHub branch
+        # TODO rename the branch to the current release
+        ("EDLY_SELFHOSTED_GIT_BRANCH", "main"),
+    ]
 )
 
 ########################################
 # PATCH LOADING
 ########################################
 
-# For each file in tutorsurvey_plugin/patches,
+# For each file in tutoredlyselfhosted/patches,
 # apply a patch based on the file's name and contents.
 for path in glob(
-    str(importlib_resources.files("tutorsurvey_plugin") / "patches" / "*")
+    str(importlib_resources.files("tutoredlyselfhosted") / "patches" / "*")
 ):
     with open(path, encoding="utf-8") as patch_file:
         hooks.Filters.ENV_PATCHES.add_item((os.path.basename(path), patch_file.read()))
@@ -31,12 +36,13 @@ for path in glob(
 ########################################
 # MFE footer customisation
 ########################################
-PLUGIN_SLOTS.add_items(
-    [
-        (
-            "all",
-            "footer_slot",
-            """{
+
+# Display onboarding survey in MFEs
+PLUGIN_SLOTS.add_item(
+    (
+        "all",
+        "footer_slot",
+        """{
     op: PLUGIN_OPERATIONS.Insert,
     widget: {
         id: 'custom_footer',
@@ -44,8 +50,7 @@ PLUGIN_SLOTS.add_items(
         RenderWidget: () => <OnboardingSurvey />
     }
 }""",
-        )
-    ]
+    )
 )
 
 ########################################

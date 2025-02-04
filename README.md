@@ -1,23 +1,22 @@
-## Steps
+# Edly plugins for self-hosted Open edX platform
 
-1. Use authoring mfe with changes branch and mount it.
-2. Mount survey_api
-3. Install dependencies and enable tutor-survey-plugin
-4. Re-build the openedx-dev image and run the platform
+This repository contains some custom changes for self-hosted Open edX platforms, such as the [machine image](https://aws.amazon.com/marketplace/pp/prodview-iji6gmbfbpi3o) that is available on the AWS marketplace.
 
-### Authoring
+## Installation
 
-The authoring mfe has an open PR with latest changes
+Install and enable the "edly-selfhosted" plugin:
 
-### survey_api
+    pip install -e "git+https://github.com/edly-io/edly-selfhosted.git@main#egg=tutor-edly-selfhosted&subdirectory=tutor-edly-selfhosted"
+    tutor plugins enable edly-selfhosted
 
-Survey_api contains the custom api.
-Files with changes
+Build the "mfe", "openedx" and "openedx-dev" Docker images:
 
-- views.py
-- urls.py
-- apps.py
+    tutor images build mfe openedx openedx-dev
 
-### tutor-survey-plugin
+Launch the platform:
 
-It only has a hook that introduces the api in the platform in plugin.py
+    tutor local launch
+
+## License
+
+This work is licensed under the terms of the [GNU Affero General Public License (AGPL)](https://github.com/edly-io/edly-selfhosted/blob/main/LICENSE.txt>).
