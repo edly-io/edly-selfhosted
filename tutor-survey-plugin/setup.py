@@ -28,10 +28,10 @@ ABOUT = load_about()
 setup(
     name="tutor-survey-plugin",
     version=ABOUT["__version__"],
-    url="https://github.com/myusername/tutor-survey-plugin",
+    url="https://github.com/edly-io/tutor-survey-plugin",
     project_urls={
-        "Code": "https://github.com/myusername/tutor-survey-plugin",
-        "Issue tracker": "https://github.com/myusername/tutor-survey-plugin/issues",
+        "Code": "https://github.com/edly-io/tutor-survey-plugin",
+        "Issue tracker": "https://github.com/edly-io/tutor-survey-plugin/issues",
     },
     license="AGPLv3",
     author="John Doe",

@@ -9,7 +9,7 @@ Installation
 
 .. code-block:: bash
 
-    pip install git+https://github.com/myusername/tutor-survey-plugin
+    pip install git+https://github.com/edly-io/tutor-survey-plugin
 
 Usage
 *****

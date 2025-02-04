@@ -1,56 +1,55 @@
 const { Popover } = await import('@typeform/embed-react');
 const { getAuthenticatedHttpClient } = await import('@edx/frontend-platform/auth');
-const { useState, useEffect } = await import ('react');
+const { useState, useEffect } = await import('react');
 
 
 const OnboardingSurvey = () => {
-    const [showForm, setShowForm] = useState(null);
-    const [userData, setUserData] = useState({
-      user: '',
-      email: ''
-    });
-    const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(null);
+  const [userData, setUserData] = useState({
+    user: '',
+    email: ''
+  });
+  const [loading, setLoading] = useState(true);
 
-    const apiUrl = `${getConfig().LMS_BASE_URL}/api/onboarding-survey/`;
+  const apiUrl = `${getConfig().LMS_BASE_URL}/api/onboarding-survey/`;
 
-    const handleOnSubmit = () => {
-      const updateOnboardingFormStatus = async () => {
-        try {
-          await getAuthenticatedHttpClient().post(apiUrl, {
-            form_filled: true
-          })
-          localStorage.setItem("form_filled", "true");
-        } catch {}
-      }
-
-      updateOnboardingFormStatus();
+  const handleOnSubmit = () => {
+    const updateOnboardingFormStatus = async () => {
+      try {
+        await getAuthenticatedHttpClient().post(apiUrl, {
+          form_filled: true
+        })
+        localStorage.setItem("form_filled", "true");
+      } catch { }
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await getAuthenticatedHttpClient().get(apiUrl);
-                setShowForm(response.data.show_form);
-                setUserData({
-                  user: response.data.username, 
-                  email: response.data.email
-                })
+    updateOnboardingFormStatus();
+  }
 
-                console.log(response);
-                if (!response.data.show_form) {
-                  localStorage.setItem("form_filled", "true");
-                }
-            } catch {
-                setShowForm(false); 
-            } finally {
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAuthenticatedHttpClient().get(apiUrl);
+        setShowForm(response.data.show_form);
+        setUserData({
+          user: response.data.username,
+          email: response.data.email
+        })
 
-        if (!localStorage.getItem("form_filled")) fetchData();
-    }, []);
+        if (!response.data.show_form) {
+          localStorage.setItem("form_filled", "true");
+        }
+      } catch {
+        setShowForm(false);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (loading) return <></>;
+    if (!localStorage.getItem("form_filled")) fetchData();
+  }, []);
 
-    return showForm ? <Popover id="WHBX8vDV" height="90vh" width="50vw" open="load" hidden={userData} onSubmit={handleOnSubmit}/> : <></>;
+  if (loading) return <></>;
+
+  return showForm ? <Popover id="{{ SURVEY_PLUGIN_FORM_ID }}" height="90vh" width="50vw" open="load" hidden={userData} onSubmit={handleOnSubmit} /> : <></>;
 }
