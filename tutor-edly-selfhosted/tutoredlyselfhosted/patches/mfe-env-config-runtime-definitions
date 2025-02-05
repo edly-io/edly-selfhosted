@@ -2,6 +2,13 @@ const { Popover } = await import('@typeform/embed-react');
 const { getAuthenticatedHttpClient } = await import('@edx/frontend-platform/auth');
 const { useState, useEffect } = await import('react');
 
+/*
+Display an onboarding form. This form is displayed just once: after it is submitted, we
+make a POST API call to /api/onboarding-survey/ to tell the backend not to display the form
+again. In addition, making a GET to this same endpoint tells the frontend whether to
+display the form. A negative response is stored in local storage, to minimize API calls.
+*/
+
 
 const OnboardingSurvey = () => {
   const [showForm, setShowForm] = useState(null);
@@ -12,6 +19,7 @@ const OnboardingSurvey = () => {
   const [loading, setLoading] = useState(true);
 
   const apiUrl = `${getConfig().LMS_BASE_URL}/api/onboarding-survey/`;
+  const localStorageKey = "edly_onboarding_form_filled";
 
   const handleOnSubmit = () => {
     const updateOnboardingFormStatus = async () => {
@@ -19,7 +27,7 @@ const OnboardingSurvey = () => {
         await getAuthenticatedHttpClient().post(apiUrl, {
           form_filled: true
         })
-        localStorage.setItem("form_filled", "true");
+        localStorage.setItem(localStorageKey, "true");
       } catch { }
     }
 
@@ -27,7 +35,7 @@ const OnboardingSurvey = () => {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchFormData = async () => {
       try {
         const response = await getAuthenticatedHttpClient().get(apiUrl);
         setShowForm(response.data.show_form);
@@ -37,7 +45,8 @@ const OnboardingSurvey = () => {
         })
 
         if (!response.data.show_form) {
-          localStorage.setItem("form_filled", "true");
+          // Cache negative responses
+          localStorage.setItem(localStorageKey, "true");
         }
       } catch {
         setShowForm(false);
@@ -46,10 +55,12 @@ const OnboardingSurvey = () => {
       }
     };
 
-    if (!localStorage.getItem("form_filled")) fetchData();
+    // Check API when cache is not defined
+    if (!localStorage.getItem(localStorageKey)) fetchFormData();
   }, []);
 
   if (loading) return <></>;
 
+  // https://www.typeform.com/developers/embed/react/
   return showForm ? <Popover id="{{ EDLY_SELFHOSTED_FORM_ID }}" height="90vh" width="50vw" open="load" hidden={userData} onSubmit={handleOnSubmit} /> : <></>;
 }
