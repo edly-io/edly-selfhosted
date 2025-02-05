@@ -1,14 +1,14 @@
 """
-URLs for survey_api.
+URLs for edly_selfhosted.
 """
 
 from django.urls import re_path
-from .views import OnboardingSurveyAPI
+from . import views
 
 urlpatterns = [
     re_path(
         r"^api/onboarding-survey/$",
-        OnboardingSurveyAPI.as_view(),
+        views.OnboardingSurveyAPI.as_view(),
         name="onboarding-survey",
     ),
 ]

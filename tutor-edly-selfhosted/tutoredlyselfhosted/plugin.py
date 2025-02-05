@@ -47,13 +47,13 @@ PLUGIN_SLOTS.add_item(
     widget: {
         id: 'custom_footer',
         type: DIRECT_PLUGIN,
-        RenderWidget: () => <OnboardingSurvey />
+        RenderWidget: () => <EdlyOnboardingSurvey />
     }
 }""",
     )
 )
 
 ########################################
-# Survey API development
+# edx-platform app development
 ########################################
-hooks.Filters.MOUNTED_DIRECTORIES.add_item(("openedx", "survey_api"))
+hooks.Filters.MOUNTED_DIRECTORIES.add_item(("openedx", "edly_selfhosted"))

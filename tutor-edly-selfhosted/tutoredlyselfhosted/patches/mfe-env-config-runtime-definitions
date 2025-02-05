@@ -4,13 +4,13 @@ const { useState, useEffect } = await import('react');
 
 /*
 Display an onboarding form. This form is displayed just once: after it is submitted, we
-make a POST API call to /api/onboarding-survey/ to tell the backend not to display the form
+make a POST call to the Edly API endpoint  to tell the backend not to display the form
 again. In addition, making a GET to this same endpoint tells the frontend whether to
 display the form. A negative response is stored in local storage, to minimize API calls.
 */
 
 
-const OnboardingSurvey = () => {
+const EdlyOnboardingSurvey = () => {
   const [showForm, setShowForm] = useState(null);
   const [userData, setUserData] = useState({
     user: '',
@@ -18,6 +18,7 @@ const OnboardingSurvey = () => {
   });
   const [loading, setLoading] = useState(true);
 
+  // See the corresponding url and view in the Edly self-hosted app.
   const apiUrl = `${getConfig().LMS_BASE_URL}/edly/api/onboarding-survey/`;
   const localStorageKey = "edly_onboarding_form_filled";
 

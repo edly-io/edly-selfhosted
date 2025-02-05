@@ -54,12 +54,6 @@ ghostdriver.log
 output/*.html
 output/*/index.html
 
-# Sphinx
-docs/_build
-docs/modules.rst
-docs/survey_api.rst
-docs/survey_api.*.rst
-
 # Private requirements
 requirements/private.in
 requirements/private.txt

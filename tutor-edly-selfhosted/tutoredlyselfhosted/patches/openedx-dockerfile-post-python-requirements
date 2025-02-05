@@ -1,2 +1,4 @@
-# Install survey API app (if not installed before)
-RUN stat /mnt/survey_api 2> /dev/null || pip install -e "git+https://github.com/edly-io/edly-selfhosted.git@{{ EDLY_SELFHOSTED_GIT_BRANCH }}#egg=survey_api&subdirectory=survey_api"
+# Install edx-platform app for Edly (if not installed before)
+RUN (stat /mnt/edly_selfhosted 2> /dev/null && echo "Running edly_selfhosted from mount") || \
+    (echo "Installing edly_selfhosted from GitHub" && \
+    pip install -e "git+https://github.com/edly-io/edly-selfhosted.git@{{ EDLY_SELFHOSTED_GIT_BRANCH }}#egg=edly_selfhosted&subdirectory=edly_selfhosted")

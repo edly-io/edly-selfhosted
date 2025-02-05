@@ -1,0 +1,2 @@
+include README.rst
+recursive-include edly_selfhosted *.html *.png *.gif *.js *.css *.jpg *.jpeg *.svg

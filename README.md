@@ -19,9 +19,9 @@ Launch the platform:
 
 ## Development
 
-To work on the "survey_api" application locally, bind-mount it with:
+To work on the "edly_selfhosted" application locally, bind-mount it with:
 
-    tutor mounts add ./survey_api
+    tutor mounts add ./edly_selfhosted
 
 And run the platform in development mode, as usual:
 

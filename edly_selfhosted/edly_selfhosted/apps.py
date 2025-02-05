@@ -1,5 +1,5 @@
 """
-survey_api Django application initialization.
+edly_selfhosted Django application initialization.
 """
 
 from django.apps import AppConfig
@@ -9,23 +9,23 @@ from edx_django_utils.plugins.constants import (
 from openedx.core.djangoapps.plugins.constants import ProjectType
 
 
-class SurveyApiConfig(AppConfig):
+class EdlySelfHostedConfig(AppConfig):
     """
-    Configuration for the survey_api Django application.
+    Configuration for the edly_selfhosted Django application.
     """
 
-    name = 'survey_api'
+    name = 'edly_selfhosted'
 
     plugin_app = {
     # Configuration setting for Plugin URLs for this app.
     PluginURLs.CONFIG: {
         ProjectType.LMS: {
             # The namespace to provide to django's urls.include.
-            PluginURLs.NAMESPACE: 'survey_api',
+            PluginURLs.NAMESPACE: 'edly_selfhosted',
 
             # The application namespace to provide to django's urls.include.
             # Optional; Defaults to None.
-            PluginURLs.APP_NAME: 'survey_api',
+            PluginURLs.APP_NAME: 'edly_selfhosted',
 
             # The regex to provide to django's urls.url.
             # Optional; Defaults to r''.
@@ -37,11 +37,11 @@ class SurveyApiConfig(AppConfig):
         },
         ProjectType.CMS: {
             # The namespace to provide to django's urls.include.
-            PluginURLs.NAMESPACE: 'survey_api',
+            PluginURLs.NAMESPACE: 'edly_selfhosted',
 
             # The application namespace to provide to django's urls.include.
             # Optional; Defaults to None.
-            PluginURLs.APP_NAME: 'survey_api',
+            PluginURLs.APP_NAME: 'edly_selfhosted',
 
             # The regex to provide to django's urls.url.
             # Optional; Defaults to r''.

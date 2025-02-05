@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Package metadata for survey_api.
+Package metadata for edly_selfhosted pluggable app.
 """
 import os
 import re
@@ -26,11 +26,11 @@ def get_version(*file_paths):
 
 
 
-VERSION = get_version('survey_api', '__init__.py')
+VERSION = get_version('edly_selfhosted', '__init__.py')
 README = open(os.path.join(os.path.dirname(__file__), 'README.rst'), encoding="utf8").read()
 
 setup(
-    name='survey_api',
+    name='edly_selfhosted',
     version=VERSION,
     description="""Edly onboarding form for self-hosted Open edX platforms.""",
     long_description=README,
@@ -38,15 +38,15 @@ setup(
     author_email='hello@edly.io',
     url='https://github.com/edly-io/edly-selfhosted',
     packages=find_packages(
-        include=['survey_api', 'survey_api.*'],
+        include=['edly_selfhosted', 'edly_selfhosted.*'],
         exclude=["*tests"],
     ),
     entry_points={
         "lms.djangoapp": [
-            "survey_api = survey_api.apps:SurveyApiConfig",
+            "edly_selfhosted = edly_selfhosted.apps:EdlySelfHostedConfig",
         ],
         "cms.djangoapp": [
-            "survey_api = survey_api.apps:SurveyApiConfig",
+            "edly_selfhosted = edly_selfhosted.apps:EdlySelfHostedConfig",
         ],
     },
     include_package_data=True,
