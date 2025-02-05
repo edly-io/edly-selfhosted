@@ -8,13 +8,19 @@ from .serializer import OnboardingSurveySerializers
 
 
 class OnboardingSurveyAPI(APIView):
+    """
+    Return information that tells the frontend to display the onboarding survey (or not).
+
+    The form is displayed only for a single admin user, and only once. If they dismiss
+    or submit the survey, it is not displayed anymore. It is the responsibility of the
+    frontend to display the form and to cache backend responses.
+    """
+
     permission_classes = [IsAdminUser]
 
     def get(self, request):
         onboarding_survey = OnboardingSurvey.objects.last()
-
         show_form = not (onboarding_survey and onboarding_survey.form_filled)
-
         response = Response(
             {
                 "username": request.user.username,
@@ -26,21 +32,24 @@ class OnboardingSurveyAPI(APIView):
         return response
 
     def post(self, request):
+        """
+        Create an OnboardingSurvey singleton, such that
+        """
         serializer = OnboardingSurveySerializers(data=request.data)
 
         if serializer.is_valid():
             form_filled = serializer.validated_data["form_filled"]
             onboarding_survey = OnboardingSurvey.objects.last()
-
             if not onboarding_survey:
-                onboarding_survey = OnboardingSurvey.objects.create(
+                OnboardingSurvey.objects.create(
                     form_filled=form_filled
                 )
             else:
                 onboarding_survey.form_filled = form_filled
                 onboarding_survey.save()
             return Response(
-                {"message": "Form status updated successfully."}, status=HTTP_200_OK
+                {"message": "Edly form status updated successfully."},
+                status=HTTP_200_OK,
             )
 
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

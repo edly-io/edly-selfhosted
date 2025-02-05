@@ -4,7 +4,7 @@ This repository contains some custom changes for self-hosted Open edX platforms,
 
 ## Installation
 
-Install and enable the "edly-selfhosted" plugin:
+Install and enable the "edly-selfhosted" plugin for Tutor:
 
     pip install -e "git+https://github.com/edly-io/edly-selfhosted.git@main#egg=tutor-edly-selfhosted&subdirectory=tutor-edly-selfhosted"
     tutor plugins enable edly-selfhosted
@@ -22,6 +22,10 @@ Launch the platform:
 To work on the "survey_api" application locally, bind-mount it with:
 
     tutor mounts add ./survey_api
+
+And run the platform in development mode, as usual:
+
+    tutor dev launch
 
 ## License
 

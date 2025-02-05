@@ -18,7 +18,7 @@ const OnboardingSurvey = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  const apiUrl = `${getConfig().LMS_BASE_URL}/api/onboarding-survey/`;
+  const apiUrl = `${getConfig().LMS_BASE_URL}/edly/api/onboarding-survey/`;
   const localStorageKey = "edly_onboarding_form_filled";
 
   const handleOnSubmit = () => {
