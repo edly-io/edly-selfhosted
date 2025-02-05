@@ -17,6 +17,12 @@ Launch the platform:
 
     tutor local launch
 
+## Development
+
+To work on the "survey_api" application locally, bind-mount it with:
+
+    tutor mounts add ./survey_api
+
 ## License
 
 This work is licensed under the terms of the [GNU Affero General Public License (AGPL)](https://github.com/edly-io/edly-selfhosted/blob/main/LICENSE.txt>).
