@@ -6,7 +6,7 @@ This repository contains some custom changes for self-hosted Open edX platforms,
 
 Install and enable the "edly-selfhosted" plugin for Tutor:
 
-    pip install -e "git+https://github.com/edly-io/edly-selfhosted.git@main#egg=tutor-edly-selfhosted&subdirectory=tutor-edly-selfhosted"
+    pip install -e "git+https://github.com/edly-io/edly-selfhosted.git@sumac#egg=tutor-edly-selfhosted&subdirectory=tutor-edly-selfhosted"
     tutor plugins enable edly-selfhosted
 
 Build the "mfe", "openedx" and "openedx-dev" Docker images:
