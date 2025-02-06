@@ -16,8 +16,7 @@ hooks.Filters.CONFIG_DEFAULTS.add_items(
         # Typeform ID
         ("EDLY_SELFHOSTED_FORM_ID", "WHBX8vDV"),
         # Install edx-platform plugin from this GitHub branch
-        # TODO rename the branch to the current release
-        ("EDLY_SELFHOSTED_GIT_BRANCH", "main"),
+        ("EDLY_SELFHOSTED_GIT_BRANCH", "sumac"),
     ]
 )
 
