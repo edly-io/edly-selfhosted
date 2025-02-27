@@ -2,6 +2,85 @@ const { Popover } = await import('@typeform/embed-react');
 const { getAuthenticatedHttpClient } = await import('@edx/frontend-platform/auth');
 const { useState, useEffect } = await import('react');
 
+const styles = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  modal: {
+    backgroundColor: '#fff',
+    padding: '20px',
+    borderRadius: '8px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    textAlign: 'center',
+    width: '350px',
+  },
+  title: {
+    fontSize: '18px',
+    fontWeight: 'bold',
+    marginBottom: '10px',
+  },
+  text: {
+    fontSize: '14px',
+    marginBottom: '20px',
+    color: '#333',
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  },
+  buttonPrimary: {
+    backgroundColor: '#d9534f',
+    color: '#fff',
+    border: 'none',
+    padding: '10px',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
+  },
+  buttonSecondary: {
+    backgroundColor: '#e0e0e0',
+    color: '#333',
+    border: 'none',
+    padding: '10px',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
+  },
+};
+
+const Modal = ({ isModalOpen, handleOnClick }) => {
+  const getDialogStyles = () => ({ ...styles.overlay, visibility: isModalOpen ? 'visible' : 'hidden' })
+
+  return (
+    <dialog open={isModalOpen} style={getDialogStyles()}>
+      <div style={styles.modal}>
+        <div style={styles.title}>Skip This Form?</div>
+        <div style={styles.text}>
+          Would you like to skip this form permanently, or would you like to fill it out later?
+        </div>
+        <div style={styles.buttonContainer}>
+          <button style={styles.buttonPrimary} onClick={() => handleOnClick(true)}>
+            Skip permanently
+          </button>
+          <button style={styles.buttonSecondary} onClick={() => handleOnClick(false)}>
+            Fill out later
+          </button>
+        </div>
+      </div>
+    </dialog>
+  );
+};
+
 /*
 Display an onboarding form. This form is displayed just once: after it is submitted, we
 make a POST call to the Edly API endpoint  to tell the backend not to display the form
@@ -11,38 +90,57 @@ display the form. A negative response is stored in local storage, to minimize AP
 
 
 const EdlyOnboardingSurvey = () => {
-  const [showForm, setShowForm] = useState(null);
-  const [userData, setUserData] = useState({
+  const [hasFormLoadedOnce, setHasFormLoadedOnce] = useState(false);
+  const [apiData, setApiData] = useState({
     user: '',
-    email: ''
+    email: '',
+    showForm: null,
+    loadForm: null
   });
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // See the corresponding url and view in the Edly self-hosted app.
   const apiUrl = `${getConfig().LMS_BASE_URL}/edly/api/onboarding-survey/`;
   const localStorageKey = "edly_onboarding_form_filled";
 
-  const handleOnSubmit = () => {
-    const updateOnboardingFormStatus = async () => {
-      try {
-        await getAuthenticatedHttpClient().post(apiUrl, {
-          form_filled: true
-        })
-        localStorage.setItem(localStorageKey, "true");
-      } catch { }
-    }
+  const updateOnboardingFormStatus = async () => {
+    await getAuthenticatedHttpClient().post(apiUrl, {
+      form_filled: true,
+      load_form: false
+    })
+    localStorage.setItem(localStorageKey, "true");
+    window.location.reload();
+  }
 
-    updateOnboardingFormStatus();
+  const updateLoadFormStatus = async () => {
+    await getAuthenticatedHttpClient().post(apiUrl, {
+      load_form: false,
+      form_filled: false
+    })
+  }
+
+  const handleOnSubmit = () => updateOnboardingFormStatus();
+
+  const handleOnClick = async (hideForever) => {
+    setIsModalOpen(false);
+
+    if (hideForever) {
+      updateOnboardingFormStatus();
+    } else {
+      updateLoadFormStatus();
+    }
   }
 
   useEffect(() => {
     const fetchFormData = async () => {
       try {
         const response = await getAuthenticatedHttpClient().get(apiUrl);
-        setShowForm(response.data.show_form);
-        setUserData({
+        setApiData({
           user: response.data.username,
-          email: response.data.email
+          email: response.data.email,
+          showForm: response.data.show_form,
+          loadForm: response.data.load_form
         })
 
         if (!response.data.show_form) {
@@ -50,7 +148,10 @@ const EdlyOnboardingSurvey = () => {
           localStorage.setItem(localStorageKey, "true");
         }
       } catch {
-        setShowForm(false);
+        setApiData((data) => ({
+          ...data,
+          showForm: false
+        }))
       } finally {
         setLoading(false);
       }
@@ -63,5 +164,22 @@ const EdlyOnboardingSurvey = () => {
   if (loading) return <></>;
 
   // https://www.typeform.com/developers/embed/react/
-  return showForm ? <Popover id="{{ EDLY_SELFHOSTED_FORM_ID }}" height="90vh" width="50vw" open="load" hidden={userData} onSubmit={handleOnSubmit} /> : <></>;
+  return apiData.showForm 
+  ? <>
+      <Modal isModalOpen={isModalOpen} handleOnClick={handleOnClick} />
+      <Popover 
+      id="{{ EDLY_SELFHOSTED_FORM_ID }}" 
+      height="90vh" 
+      width="50vw" 
+      open="load" 
+      hidden={apiData} 
+      onSubmit={handleOnSubmit} 
+      onClose={() => {
+        setIsModalOpen(true);
+        setHasFormLoadedOnce(true);
+      }}
+      preventReopenOnClose={hasFormLoadedOnce || !apiData.loadForm}
+    /> 
+  </>
+  : <></>;
 }
