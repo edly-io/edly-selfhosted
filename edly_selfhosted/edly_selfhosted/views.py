@@ -21,11 +21,13 @@ class OnboardingSurveyAPI(APIView):
     def get(self, request):
         onboarding_survey = OnboardingSurvey.objects.last()
         show_form = not (onboarding_survey and onboarding_survey.form_filled)
+        auto_load_form = onboarding_survey and onboarding_survey.auto_load_form
         response = Response(
             {
                 "username": request.user.username,
                 "email": request.user.email,
                 "show_form": show_form,
+                "auto_load_form": auto_load_form
             }
         )
 
@@ -39,13 +41,16 @@ class OnboardingSurveyAPI(APIView):
 
         if serializer.is_valid():
             form_filled = serializer.validated_data["form_filled"]
+            auto_load_form = serializer.validated_data["auto_load_form"]
             onboarding_survey = OnboardingSurvey.objects.last()
             if not onboarding_survey:
                 OnboardingSurvey.objects.create(
-                    form_filled=form_filled
+                    form_filled=form_filled,
+                    auto_load_form=auto_load_form
                 )
             else:
                 onboarding_survey.form_filled = form_filled
+                onboarding_survey.auto_load_form = auto_load_form
                 onboarding_survey.save()
             return Response(
                 {"message": "Edly form status updated successfully."},
