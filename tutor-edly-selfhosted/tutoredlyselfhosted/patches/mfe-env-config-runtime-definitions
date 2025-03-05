@@ -92,7 +92,7 @@ display the form. A negative response is stored in local storage, to minimize AP
 const EdlyOnboardingSurvey = () => {
   const [hasFormLoadedOnce, setHasFormLoadedOnce] = useState(false);
   const [apiData, setApiData] = useState({
-    user: '',
+    name: '',
     email: '',
     showForm: null,
     autoLoadForm: null
@@ -137,7 +137,7 @@ const EdlyOnboardingSurvey = () => {
       try {
         const response = await getAuthenticatedHttpClient().get(apiUrl);
         setApiData({
-          user: response.data.username,
+          name: response.data.username,
           email: response.data.email,
           showForm: response.data.show_form,
           autoLoadForm: response.data.auto_load_form
@@ -168,18 +168,18 @@ const EdlyOnboardingSurvey = () => {
   ? <>
       <Modal isModalOpen={isModalOpen} handleOnClick={handleOnClick} />
       <Popover 
-      id="{{ EDLY_SELFHOSTED_FORM_ID }}" 
-      height="90vh" 
-      width="50vw" 
-      open="load" 
-      hidden={apiData} 
-      onSubmit={handleOnSubmit} 
-      onClose={() => {
-        setIsModalOpen(true);
-        setHasFormLoadedOnce(true);
-      }}
-      preventReopenOnClose={hasFormLoadedOnce || !apiData.autoLoadForm}
-    /> 
+        id="{{ EDLY_SELFHOSTED_FORM_ID }}" 
+        height="90vh" 
+        width="50vw" 
+        open="load" 
+        hidden={apiData} 
+        onSubmit={handleOnSubmit} 
+        onClose={() => {
+          setIsModalOpen(true);
+          setHasFormLoadedOnce(true);
+        }}
+        preventReopenOnClose={hasFormLoadedOnce || !apiData.autoLoadForm}
+      /> 
   </>
   : <></>;
 }
