@@ -42,10 +42,10 @@ setup(
     packages=find_packages(exclude=["tests*"]),
     include_package_data=True,
     python_requires=">=3.9",
-    install_requires=["tutor>=20.0.0,<21.0.0"],
+    install_requires=["tutor>=21.0.0,<22.0.0"],
     extras_require={
         "dev": [
-            "tutor[dev]>=20.0.0,<21.0.0",
+            "tutor[dev]>=21.0.0,<22.0.0",
         ]
     },
     entry_points={
@@ -63,5 +63,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
     ],
 )

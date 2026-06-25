@@ -51,7 +51,7 @@ setup(
     },
     include_package_data=True,
     install_requires=[],
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     license="AGPL 3.0",
     zip_safe=False,
     keywords='Python openedx',
@@ -64,5 +64,8 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
+        'Programming Language :: Python :: 3.14',
     ],
 )
